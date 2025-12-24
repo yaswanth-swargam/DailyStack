@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="editPost.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="card editPostCont d-flex align-items-center">
+        <form class="form form-control" id="editForm">
+            <input id="postTitle" name="postTitle">
+            <br/>
+            <textarea name="postDesc" id="postDesc" rows="5"></textarea>
+            <button type="submit">save Changes</button>
+        </form>
+        </div>
+    </div>
+
+
+    <script>
+    //const inputEl = document.getElementById('postTitle');
+    const textA = document.getElementById('postDesc');
+    const form = document.getElementById('editForm');
+
+    const userId = localStorage.getItem('userId');
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('postId');
+
+    if (!userId || !postId) {
+        window.location.href = "./login.html";
+    }
+
+    // LOAD POST
+    async function getPost() {
+        const response = await fetch(
+            `http://localhost:8081/getPost/${userId}/${postId}`
+        );
+        const post = await response.json();
+
+        document.getElementById('postTitle').value = post.postTitle;
+        textA.value = post.postDescription;
+    }
+
+    getPost();
+
+    // UPDATE POST
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!document.getElementById('postTitle').value.trim() || !textA.value.trim()) {
+            alert("Fields cannot be empty");
+            return;
+        }
+
+        const updatedPost = {
+            postTitle: document.getElementById('postTitle').value,
+            postDescription: textA.value
+        };
+
+        const response = await fetch(
+            `http://localhost:8081/updatePost/${userId}/${postId}`,
+            {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedPost)
+            }
+        );
+
+        if (!response.ok) {
+            alert('Update failed');
+            return;
+        }
+
+        alert('Post edited successfully');
+        window.location.href = './postFeed.html';
+    });
+</script>
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

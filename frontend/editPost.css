@@ -1,0 +1,74 @@
+/* Page background */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Playfair Display", serif;
+}
+
+/* Card container */
+.editPostCont {
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+/* Form styling */
+#editForm {
+    width: 100%;
+}
+
+/* Title input */
+#postTitle {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+#postTitle:focus {
+    border-color: #7b2cbf;
+    box-shadow: 0 0 0 2px rgba(123, 44, 191, 0.15);
+}
+
+/* Textarea */
+#postDesc {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+    outline: none;
+}
+
+#postDesc:focus {
+    border-color: #7b2cbf;
+    box-shadow: 0 0 0 2px rgba(123, 44, 191, 0.15);
+}
+
+/* Submit button */
+#editForm button {
+    margin-top: 18px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    background-color: #7b2cbf;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#editForm button:hover {
+    background-color: #5a189a;
+}

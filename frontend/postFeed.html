@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="postFeed.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="text-end p-2">
+        <a href="post.html" class="btn" style="background-color: rgb(179, 110, 47);color:white">new post</a>
+        <button type="button" onclick="logout()" id="logout" class="btn" style="background-color: blueviolet;color:white">Logout</button>
+    </div>
+
+    <div class="container mt-3">
+        <h3 class="m-2">My Dairy Stack</h3>
+        <div id="postsContainer" class="allPosts p-2"></div>
+    </div>
+
+
+
+
+    <script>
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                window.location.href = "./login.html";
+            }
+
+            async function loadPosts() {
+                const response = await fetch(`http://localhost:8081/getPosts/${userId}`);
+                const posts = await response.json();
+
+                const container = document.getElementById('postsContainer');
+                container.innerHTML = "";
+
+                if (posts.length === 0) {
+                    container.innerHTML = "<p>No posts yet.</p>";
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const card = document.createElement('div');
+                    card.className = "card mb-3";
+
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="card-title mb-0">${post.postTitle}</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-warning" onclick="editPost(${post.id})">Edit</button>
+                                    <button class="btn btn-sm viwebtn text-end" onclick=deletePost(${post.id})>delete</button>
+                                </div>
+                            </div>
+                            <p class="card-text">${post.postDescription}</p>
+                            <button class="btn btn-sm veiwbtn" onclick=viewPost(${post.id})>view post</button>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                });
+            }
+
+            loadPosts();
+
+
+        
+        function viewPost(postId){
+            window.location.href=`./dedicatedPage.html?postId=${postId}`;
+        }
+
+
+
+
+        function editPost(postId){
+            window.location.href=`./editPost.html?postId=${postId}`;
+        }
+
+        async function deletePost(postId){
+            if(!confirm('are you sure?')) return;
+
+            const response=await fetch(`http://localhost:8081/deletePost/${postId}`,
+                {method: 'DELETE'
+        });
+
+
+        const result=await response.json();
+
+
+        if(response.ok){
+            alert(result.message);
+            loadPosts();
+        }
+
+        }
+        //let logoutBtn=Document.getElementById('logout');
+        function logout(){
+            localStorage.removeItem('userId');
+            window.location.href="./login.html";
+        }
+
+            </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

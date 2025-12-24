@@ -1,0 +1,43 @@
+.post{
+    background-color: white;
+    box-shadow: 0px 0px 4px rgb(0,0,0,0.5);
+    padding: 5px;
+    border:1px solid black;
+    margin: 10px;
+    border-radius: 15px;
+    width:auto;
+}
+
+/* Page layout */
+body {
+    font-family: 'Playfair Display', serif;
+    background-color: #f5f2ee;
+}
+
+/* Main container */
+.container {
+    max-width: 800px;
+    background-color: #ffffff;
+    margin-top: 3rem;
+    padding: 2.5rem;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Post title */
+#postTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3a2c1d;
+    margin-bottom: 1.2rem;
+    border-bottom: 2px solid #e6dccf;
+    padding-bottom: 0.5rem;
+}
+
+/* Post description */
+#postDesc {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #5c4a3a;
+    white-space: pre-line; /* keeps line breaks */
+}

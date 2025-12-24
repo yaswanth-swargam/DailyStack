@@ -1,0 +1,17 @@
+#postBtn{
+    background-image: linear-gradient(to right,rgb(10,20,30),rgb(63, 45, 223));
+    border-radius: 10px;
+    border-color: none;
+    color: white;
+}
+body{
+    font-family: 'confortaa';
+}
+
+.form-div{
+    border:1px solid;
+    height: 70vh;
+    border-radius: 10px;
+    padding:10px;
+    box-shadow: 0px 0px 4px rgba(97, 55, 55, 0.5);
+}

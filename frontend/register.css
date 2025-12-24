@@ -1,0 +1,9 @@
+#registerBtn{
+    background-image: linear-gradient(to right,rgb(10,20,30),rgb(63, 45, 223));
+    border-radius: 10px;
+    border-color: none;
+    color: white;
+}
+body{
+    font-family: 'confortaa';
+}

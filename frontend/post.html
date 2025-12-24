@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Your Day</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="post.css">
+</head>
+<body>
+
+    <div class="container vh-100 d-flex justify-content-center align-items-center ">
+        <form class="w-100 form-div" style="max-width: 500px;" method="post" id="postDet">
+            
+            <div class="form-group mb-3">
+                <label for="postTitle" class="form-label">Post Title</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="postTitle" 
+                    placeholder="Enter a title"
+                    required
+                    name="postTitle">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="postDesc" class="form-label">Describe your day</label>
+                <textarea 
+                    class="form-control" 
+                    name="postDesc" 
+                    id="postDesc" 
+                    rows="6"
+                    placeholder="Write about your day..."
+                    required
+                    ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" id="postBtn">
+                Post your day
+            </button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+     <script>
+const form = document.getElementById('postDet');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const postTitle = document.getElementById('postTitle').value;
+    const postDescription = document.getElementById('postDesc').value;
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+        alert("Login required");
+        return;
+    }
+
+    const response = await fetch('http://localhost:8081/newPost', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userId,
+            postTitle,
+            postDescription
+        })
+    });
+
+    const body = await response.json();
+    if (response.ok) {
+        window.location.href = "./postFeed.html";
+    } else {
+        alert(body.message || "Failed to create post");
+    }
+});
+</script>
+
+</body>
+</html>
