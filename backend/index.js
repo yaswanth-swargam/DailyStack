@@ -1,6 +1,7 @@
 const express=require('express');
 const app=express();
-
+require('dotenv').config()
+const nodemailer=require('nodemailer');
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 const cors=require('cors');
@@ -78,13 +79,12 @@ app.post('/loginUser', async (req, res) => {
 
     connection.query(sql, [email], async (err, result) => {
 
-        // 🔴 SQL / DB error
         if (err) {
             console.log("DB ERROR:", err);
             return res.status(500).send("database error");
         }
 
-        // 🔴 No user found
+        
         if (result.length === 0) {
             return res.status(404).send("user not exists please register");
         }
@@ -215,3 +215,66 @@ app.put('/updatePost/:userId/:postId',async (request,response)=>{
     });
 
 })
+
+
+
+//mailer setup
+
+
+const transporter=nodemailer.createTransport({
+    service:"gmail",
+    auth:{
+        // user:'swargamyaswanth106@gmail.com',
+        // pass:'invzfjxagklbphri'
+        user:process.env.MAIL_USER,
+        pass:process.env.MAIL_PASS
+    }
+});
+// send mail
+
+app.post('/sendMail/:postId', async (req, res) => {
+  const { userId} = req.body;
+  const {postId}=req.params;
+
+  const sql = `SELECT email FROM users WHERE id = ?`;
+
+  connection.query(sql, [userId], async (err, result) => {
+    if (err) {
+      return res.status(400).json({ success: false, message: "DB error" });
+    }
+
+    if (!result.length) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const toMail = result[0].email;
+
+    const sql2=`select postTitle,postDescription from posts where id=?`;
+    connection.query(sql2,[postId],async (err,res2)=>{
+        if(err){
+            return res.status(404).json({ success: false, message: "Post not found" });
+        }
+
+        const postTitle=res2[0].postTitle;
+        const postDescription=res2[0].postDescription;
+
+
+        try {
+      await transporter.sendMail({
+        //from: "swargamyaswanth106@gmail.com",
+        from: process.env.MAIL_USER,
+        to: toMail,
+        subject: postTitle,
+        text: postDescription,
+      });
+
+      return res.json({ success: true, message: "Email sent!" });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ success: false, message: e.message });
+    }
+
+    })
+    
+  });
+});

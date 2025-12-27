@@ -52,6 +52,7 @@
                                 <h5 class="card-title mb-0">${post.postTitle}</h5>
                                 <div>
                                     <button class="btn btn-sm btn-warning" onclick="editPost(${post.id})">Edit</button>
+                                    <button class="btn btn-sm btn-warning" id="mailBtn${post.id}" onclick="mailRes(${post.id})">email</button>
                                     <button class="btn btn-sm viwebtn text-end" onclick=deletePost(${post.id})>delete</button>
                                 </div>
                             </div>
@@ -96,6 +97,38 @@
         }
 
         }
+
+
+
+
+
+
+
+        async function mailRes(postId) {
+            try {
+                const response = await fetch(`http://localhost:8081/sendMail/${postId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId
+                })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Mail sent successfully!");
+                    const mailBtn=document.getElementById(`mailBtn${postId}`);
+                    mailBtn.innerHTML="sent!!!"
+                } else {
+                    alert("Could not send mail: " + result.message);
+                }
+            } catch (err) {
+                alert("Something went wrong while sending email");
+  }
+}
+
+
         //let logoutBtn=Document.getElementById('logout');
         function logout(){
             localStorage.removeItem('userId');
